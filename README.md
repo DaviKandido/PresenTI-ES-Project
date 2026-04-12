@@ -95,4 +95,57 @@ O sistema é baseado em uma arquitetura distribuída envolvendo:
 Copyright © 2026 PresenTI. Todos os direitos reservados.
 
 Este projeto está licenciado sob a **Attribution 4.0 International License** — [ver arquivo `LICENSE`](./LICENSE).# PresenTI-ES-Project
-# PresenTI-ES-Project
+
+## Diagrama 
+
+flowchart LR
+    %% Atores
+    Prof("👤\nProfessor")
+    Alun("👤\nAluno")
+    Back("⚙️\nSistema Back-end")
+
+    %% Limite do Sistema
+    subgraph PresenTI [PresenTI - Sistema de Chamada Automática]
+        direction TB
+        UC1([Autenticar no Sistema])
+        UC2([Abrir Sessão de Aula])
+        UC3([Transmitir Token BLE])
+        UC4([Editar Presença Manualmente])
+        UC5([Escanear Sinal BLE])
+        UC6([Enviar Confirmação de Presença])
+        UC7([Gerar Token da Sessão])
+        UC8([Validar Pacote de Presença])
+        UC9([Consolidar Lista de Chamada])
+    end
+
+    %% Associações do Professor
+    Prof --- UC1
+    Prof --- UC2
+    Prof --- UC3
+    Prof --- UC4
+
+    %% Associações do Aluno
+    Alun --- UC1
+    Alun --- UC5
+    Alun --- UC6
+
+    %% Associações do Back-end
+    UC7 --- Back
+    UC8 --- Back
+    UC9 --- Back
+
+    %% Relacionamentos de Inclusão (Include)
+    UC2 -. "<< include >>" .-> UC7
+    UC6 -. "<< include >>" .-> UC8
+    UC8 -. "<< include >>" .-> UC9
+
+    style PresenTI fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style UC1 fill:#ffffff,stroke:#333
+    style UC2 fill:#ffffff,stroke:#333
+    style UC3 fill:#ffffff,stroke:#333
+    style UC4 fill:#ffffff,stroke:#333
+    style UC5 fill:#ffffff,stroke:#333
+    style UC6 fill:#ffffff,stroke:#333
+    style UC7 fill:#ffffff,stroke:#333
+    style UC8 fill:#ffffff,stroke:#333
+    style UC9 fill:#ffffff,stroke:#333
