@@ -1,7 +1,22 @@
 package com.tiv.presenti.usuarios.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import java.util.Collection;
+import java.util.List;
+
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.tiv.presenti.utils.TiposUser;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,17 +25,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-
-public class Usuario {
+@EqualsAndHashCode(of = "num_pessoa")
+public class Usuario implements UserDetails {
 
     @NotBlank
     @Id
-    @Column(name = "num_matricula")
-    private String id;
+    @Column(name = "num_pessoa")
+    private String numPessoa;
 
     @NotBlank
-    @Column(unique = true)
-    private String num_pessoa;
+    @Column(unique = true, name = "num_matricula")
+    private String numMatricula;
 
     @NotBlank
     @Column
@@ -40,19 +55,39 @@ public class Usuario {
     private String image_url;
 
     @Column(nullable = false)
-    Tipo tipo;
+    TiposUser tipo;
 
-    public Usuario(String id, String num_pessoa, String nome, String email, String senha, Tipo tipo){
-        this.id = id;
-        this.num_pessoa = num_pessoa;
+    public Usuario(String numPessoa, String numMatricula, String nome, String email, String senha, TiposUser tipo){
+        this.numPessoa = numPessoa;
+        this.numMatricula = numMatricula;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.tipo = tipo;
     }
 
-    enum Tipo{
-        ADMIN, USUARIO
+
+    // Spring consulta para encontrar as Roles (tipos/permissões) do usuario
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.tipo == tipo.ADMIN) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), 
+                           new SimpleGrantedAuthority("ROLE_PROFESSOR"),
+                           new SimpleGrantedAuthority("ROLE_ALUNO"));
+        } else if(this.tipo == tipo.PROFESSOR) {
+            return List.of(new SimpleGrantedAuthority("ROLE_PROFESSOR"),
+                           new SimpleGrantedAuthority("ROLE_ALUNO"));
+        }
+        else return List.of(new SimpleGrantedAuthority("ROLE_ALUNO"));
+    }
+
+    @Override
+    public @Nullable String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.numPessoa;
     }
 }
-

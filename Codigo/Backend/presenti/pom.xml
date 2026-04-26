@@ -30,44 +30,81 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+		<!-- ===== DEPENDÊNCIAS CORE DO SPRING BOOT ===== -->
+		<!-- Fornece suporte a JPA (Java Persistence API) para acesso a dados com Hibernate -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<!-- Adiciona segurança à aplicação: autenticação, autorização e proteção contra ataques -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
+		<!-- Framework para criar APIs REST e aplicações web com Spring MVC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
+
+		<!-- ===== DEPENDÊNCIAS DE VALIDAÇÃO E AUTENTICAÇÃO ===== -->
+		<!-- API padrão de validação de dados em Java (bean validation) -->
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
 			<version>3.1.1</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<!-- Biblioteca para criar e validar tokens JWT (autenticação stateless) -->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.5.1</version>
+		</dependency>
+
+		<!-- ===== DEPENDÊNCIAS DE PRODUTIVIDADE ===== -->
+		<!-- Reduz boilerplate code gerando getters, setters, construtores, equals, etc. -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- Fornece hot reload e ferramentas de desenvolvimento para acelerar o ciclo de desenvolvimento -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- ===== DEPENDÊNCIAS DE TESTE ===== -->
+		<!-- Suporte para testes de repositórios e camada de dados JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Suporte para testes de segurança (mock de usuários, testes de autorização, etc.) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Suporte para testes de controllers e APIs REST (MockMvc) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- ===== DEPENDÊNCIAS DE BANCO DE DADOS ===== -->
+		<!-- Banco de dados H2 em memória para desenvolvimento e testes -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

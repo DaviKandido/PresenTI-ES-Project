@@ -1,10 +1,11 @@
 package com.tiv.presenti.usuarios.service;
 
-import com.tiv.presenti.usuarios.model.Usuario;
-import com.tiv.presenti.usuarios.persistence.UsuariosRepository;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.tiv.presenti.usuarios.model.Usuario;
+import com.tiv.presenti.usuarios.persistence.UsuariosRepository;
 
 @Service
 public class UsuariosService {
@@ -15,7 +16,11 @@ public class UsuariosService {
         this.usuariosRepository = usuariosRepository;
     }
 
-    public Optional<Usuario> lerUsuario(String num_matricula){
-        return usuariosRepository.getUsuariosById(num_matricula);
+    public Optional<Usuario> lerUsuario(String num_pessoa){
+        return usuariosRepository.getUsuariosByNumPessoa(num_pessoa);
+    }
+
+    public Optional<String> deletarUsuario(String num_matricula){
+        return usuariosRepository.deleteUsuarioById(num_matricula);
     }
 }
