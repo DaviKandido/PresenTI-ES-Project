@@ -2,6 +2,8 @@ package com.tiv.presenti.usuarios.service;
 
 import java.util.Optional;
 
+import com.tiv.presenti.exceptions.exceptionType.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.tiv.presenti.usuarios.model.Usuario;
@@ -16,11 +18,16 @@ public class UsuariosService {
         this.usuariosRepository = usuariosRepository;
     }
 
-    public Optional<Usuario> lerUsuario(String num_pessoa){
-        return usuariosRepository.getUsuariosByNumPessoa(num_pessoa);
+    @Transactional
+    public Usuario lerUsuario(String num_pessoa){
+        return usuariosRepository.getUsuariosByNumPessoa(num_pessoa).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
     }
 
-    public Optional<String> deletarUsuario(String num_matricula){
-        return usuariosRepository.deleteUsuarioById(num_matricula);
+    @Transactional
+    public void deletarUsuario(String numPessoa) {
+        Usuario usuario = usuariosRepository.findUsuarioByNumPessoa(numPessoa)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário com número " + numPessoa + " não encontrado"));
+
+        usuariosRepository.delete(usuario);
     }
 }

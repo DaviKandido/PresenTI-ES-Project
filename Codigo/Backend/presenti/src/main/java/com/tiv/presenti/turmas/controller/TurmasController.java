@@ -20,6 +20,7 @@ public class TurmasController {
     }
 
     // Post
+
     @PostMapping
     public ResponseEntity<Turma> criarTurma(@RequestBody Turma turma) {
         Turma turmaSalva = turmasService.salvarTurma(turma);
@@ -36,10 +37,10 @@ public class TurmasController {
     // Get
     @GetMapping("/{id}")
     public ResponseEntity<Turma> buscarTurmaPorId(@PathVariable String id) {
-        Optional<Turma> turma = turmasService.lerTurma(id);
+        Turma turma = turmasService.lerTurma(id);
 
-        if (turma.isPresent()) {
-            return ResponseEntity.ok(turma.get());
+        if (turma != null) {
+            return ResponseEntity.ok(turma);
         } else {
             return ResponseEntity.notFound().build();
         }

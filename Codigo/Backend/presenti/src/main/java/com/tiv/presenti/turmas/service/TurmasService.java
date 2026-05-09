@@ -1,5 +1,6 @@
 package com.tiv.presenti.turmas.service;
 
+import com.tiv.presenti.exceptions.exceptionType.ResourceNotFoundException;
 import com.tiv.presenti.turmas.model.Turma;
 import com.tiv.presenti.turmas.persistence.TurmasRepository;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class TurmasService {
     }
 
     // Read
-    public Optional<Turma> lerTurma(String num_registro) {
-        return turmasRepository.getTurmaById(num_registro);
+    public Turma lerTurma(String num_registro) {
+        return turmasRepository.getTurmaById(num_registro).orElseThrow(()->new ResourceNotFoundException("Turma não existe"));
     }
 
     // Read all

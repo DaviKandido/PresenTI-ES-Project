@@ -2,6 +2,9 @@ package com.tiv.presenti.auth.controller;
 
 import java.util.Optional;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +20,7 @@ import com.tiv.presenti.auth.DTO.LoginResponsaDTO;
 import com.tiv.presenti.auth.DTO.RegisterDTO;
 import com.tiv.presenti.usuarios.model.Usuario;
 import com.tiv.presenti.usuarios.persistence.UsuariosRepository;
-import com.tiv.presenti.utils.tokenService;
+import com.tiv.presenti.utils.TokenService;
 
 import jakarta.validation.Valid;
 
@@ -33,8 +36,10 @@ public class authController {
   private UsuariosRepository usuariosRepository;
 
   @Autowired
-  private tokenService tokenService;
+  private TokenService tokenService;
 
+  @Operation(summary = "Registrar um novo usuário", description = "Endpoint público para cadastro.")
+  @SecurityRequirements
   @PostMapping("/login")
   public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
       
@@ -46,6 +51,8 @@ public class authController {
     return ResponseEntity.ok(new LoginResponsaDTO(token));
   }
 
+  @Operation(summary = "Fazer login", description = "Gera o token JWT.")
+  @SecurityRequirements
   @PostMapping("/signup")
   public ResponseEntity signUp(@RequestBody @Valid RegisterDTO data) {
 

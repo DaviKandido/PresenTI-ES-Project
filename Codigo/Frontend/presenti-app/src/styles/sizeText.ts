@@ -1,4 +1,5 @@
 export const sizeText = {
+  header: 32,
   title: 18,
   subtitle: 12,
   descriptions: 14,

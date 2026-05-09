@@ -3,13 +3,14 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
+    "start": "npx expo start",
+    "android": "npx expo run:android",
+    "ios": "npx expo run:ios",
+    "web": "npx expo start --web",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -32,7 +33,7 @@
     "react-dom": "19.1.0",
     "react-hook-form": "^7.73.1",
     "react-native": "0.81.5",
-    "react-native-ble-peripheral": "^2.0.1",
+    "react-native-ble-advertise": "^2.0.5",
     "react-native-ble-plx": "^3.5.1",
     "react-native-gesture-handler": "^2.31.1",
     "react-native-reanimated": "~4.1.1",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@types/react": "~19.1.0",
     "eslint": "^10.2.1",
+    "patch-package": "^8.0.1",
     "prettier": "^3.8.3",
     "react-test-renderer": "19.1.0",
     "typescript": "~5.9.2"

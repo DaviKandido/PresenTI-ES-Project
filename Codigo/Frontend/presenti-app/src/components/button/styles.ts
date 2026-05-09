@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { appColors } from '@/styles/appColors';
+import { appColors } from '../../styles/appColors';
 
 export const styles = StyleSheet.create({
-  conatiner: {
+  container: {
     height: 52,
     width: '100%',
-    backgroundColor: appColors.blue.ligth,
+    backgroundColor: appColors.blue.light,
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',

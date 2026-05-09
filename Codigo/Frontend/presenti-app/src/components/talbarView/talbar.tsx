@@ -1,61 +1,16 @@
-/**
- * PucTabBar — Tab bar genérica inspirada no app PUC
- *
- * ─── Instalação das dependências ───────────────────────────────────────────
- *   npx expo install react-native-safe-area-context @expo/vector-icons
- *   (ou com npm/yarn puro)
- *   npm install react-native-safe-area-context @expo/vector-icons
- *
- * ─── Uso standalone ────────────────────────────────────────────────────────
- *   // App.tsx
- *   import { SafeAreaProvider } from 'react-native-safe-area-context';
- *   import PucTabBar, { TabKey } from './PucTabBar';
- *
- *   export default function App() {
- *     const [tab, setTab] = useState<TabKey>('inicio');
- *     return (
- *       <SafeAreaProvider>
- *         <View style={{ flex: 1 }}>
- *           <YourScreen activeTab={tab} />
- *           <PucTabBar activeTab={tab} onTabPress={setTab} />
- *         </View>
- *       </SafeAreaProvider>
- *     );
- *   }
- *
- * ─── Uso com React Navigation ──────────────────────────────────────────────
- *   <Tab.Navigator tabBar={(props) => <PucTabBar {...props} />}>
- *     ...
- *   </Tab.Navigator>
- * ──────────────────────────────────────────────────────────────────────────
- */
-
-import { TabConfig } from '@/@types/tabConfig';
-import { appColors } from '@/styles/appColors';
-import { appRoutes } from '@/utils/appRoutes';
+import { TabConfig } from '../../@types/tabConfig';
+import { appColors } from '../../styles/appColors';
+import { appRoutes } from '../../utils/appRoutes';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import React, { useCallback } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-// ─────────────────────────────────────────────
-//  TIPOS EXPORTADOS
-// ─────────────────────────────────────────────
 
 export interface PucTabBarProps {
   activeTab: string;
   onTabPress: (key: string) => void;
   tabConfig?: TabConfig[];
 }
-
-// ─────────────────────────────────────────────
-//  CONFIGURAÇÃO DAS ABAS
-//  Edite aqui para customizar ícones e labels
-// ─────────────────────────────────────────────
-
-// ─────────────────────────────────────────────
-//  TEMA — altere para tematizar o componente
-// ─────────────────────────────────────────────
 
 const THEME = {
   background: appColors.blue.dark,
@@ -64,31 +19,17 @@ const THEME = {
   iconInactive: '#4a5a6a',
   labelActive: '#ffffff',
   labelInactive: '#4a5a6a',
-  centerBg: appColors.blue.ligth,
+  centerBg: appColors.blue.light,
   centerBgActive: '#005380',
   centerIcon: '#ffffff',
   indicator: '#ffffff',
 } as const;
 
-// ─────────────────────────────────────────────
-//  DIMENSÕES
-// ─────────────────────────────────────────────
-
 const CENTER_SIZE = 70;
 const INDICATOR_WIDTH = 26;
 
-// ─────────────────────────────────────────────
-//  COMPONENTE
-// ─────────────────────────────────────────────
-
 export default function TabBar({ activeTab, onTabPress, tabConfig }: PucTabBarProps) {
-  const TABS: TabConfig[] = tabConfig || [
-    appRoutes.inicio,
-    appRoutes.ingressar,
-    appRoutes.perfil,
-    appRoutes.campi,
-    appRoutes.apuc,
-  ];
+  const TABS: TabConfig[] = tabConfig || [appRoutes.inicio, appRoutes.ingressar, appRoutes.perfil, appRoutes.campi, appRoutes.apuc];
 
   const insets = useSafeAreaInsets();
 
@@ -108,16 +49,14 @@ export default function TabBar({ activeTab, onTabPress, tabConfig }: PucTabBarPr
         return (
           <TouchableOpacity
             key={tab.key}
-            onPress={() => onTabPress(tab.key)}
+            onPress={() => tab.action?.() || onTabPress(tab.key)}
             activeOpacity={0.8}
             style={styles.centerWrapper}
             accessibilityRole="button"
-            accessibilityLabel="Perfil"
+            accessibilityLabel={tab.label}
             accessibilityState={{ selected: isActive }}
           >
-            <View style={[styles.centerButton, isActive && styles.centerButtonActive]}>
-              {renderIcon(tab, THEME.centerIcon, 26)}
-            </View>
+            <View style={[styles.centerButton, isActive && styles.centerButtonActive]}>{renderIcon(tab, THEME.centerIcon, 26)}</View>
           </TouchableOpacity>
         );
       }
@@ -126,47 +65,28 @@ export default function TabBar({ activeTab, onTabPress, tabConfig }: PucTabBarPr
       return (
         <TouchableOpacity
           key={tab.key}
-          onPress={() => onTabPress(tab.key)}
+          onPress={() => tab.action?.() || onTabPress(tab.key)}
           activeOpacity={0.7}
           style={styles.tab}
           accessibilityRole="button"
           accessibilityLabel={tab.label}
           accessibilityState={{ selected: isActive }}
         >
-          {/* Traço no topo */}
-          <View
-            style={[
-              styles.indicator,
-              { backgroundColor: isActive ? THEME.indicator : 'transparent' },
-            ]}
-          />
+          <View style={[styles.indicator, { backgroundColor: isActive ? THEME.indicator : 'transparent' }]} />
 
           {renderIcon(tab, isActive ? THEME.iconActive : THEME.iconInactive, 22)}
 
-          <Text
-            style={[styles.label, { color: isActive ? THEME.labelActive : THEME.labelInactive }]}
-          >
-            {tab.label}
-          </Text>
+          <Text style={[styles.label, { color: isActive ? THEME.labelActive : THEME.labelInactive }]}>{tab.label}</Text>
         </TouchableOpacity>
       );
     },
     [activeTab, onTabPress],
   );
 
-  return (
-    <View style={[styles.container, { paddingBottom: Math.max(insets.bottom, 8) }]}>
-      {TABS.map(renderTab)}
-    </View>
-  );
+  return <View style={[styles.container, { paddingBottom: Math.max(insets.bottom, 8) }]}>{TABS.map(renderTab)}</View>;
 }
 
-// ─────────────────────────────────────────────
-//  ESTILOS
-// ─────────────────────────────────────────────
-
 const styles = StyleSheet.create({
-  // Container principal
   container: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -174,6 +94,8 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: THEME.border,
     paddingTop: 0,
+    // Overflow visível para o botão central aparecer acima da barra
+    overflow: 'visible',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -185,7 +107,6 @@ const styles = StyleSheet.create({
     }),
   },
 
-  // Aba normal
   tab: {
     flex: 1,
     alignItems: 'center',
@@ -194,7 +115,6 @@ const styles = StyleSheet.create({
     gap: 4,
   },
 
-  // Traço superior (indicador de aba ativa)
   indicator: {
     position: 'absolute',
     top: 0,
@@ -209,17 +129,19 @@ const styles = StyleSheet.create({
     letterSpacing: 0.1,
   },
 
-  // Botão central
+  // ── Botão central ─────────────────────────────────────────────
+  // A área de toque (TouchableOpacity) sobe junto com o botão
+  // usando marginTop negativo — sem position: absolute no botão.
   centerWrapper: {
     flex: 1,
     alignItems: 'center',
-    // Eleva o botão acima da barra
-    marginTop: -(CENTER_SIZE / 2 + 4),
-    paddingBottom: 4,
+    justifyContent: 'flex-end',
+    paddingBottom: 6,
+    // Área de toque expandida para cima
+    marginTop: -(CENTER_SIZE / 2 + 12),
   },
+
   centerButton: {
-    position: 'absolute',
-    top: -70,
     width: CENTER_SIZE,
     height: CENTER_SIZE,
     borderRadius: CENTER_SIZE / 2,
@@ -236,6 +158,7 @@ const styles = StyleSheet.create({
       android: { elevation: 12 },
     }),
   },
+
   centerButtonActive: {
     backgroundColor: THEME.centerBgActive,
   },
